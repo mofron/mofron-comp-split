@@ -16,7 +16,15 @@ npm install mofron  mofron-comp-split
 
 # Sample
 ```html
-undefined```
+<require>
+    <tag module="mofron-comp-split">Split</tag>
+</require>
+
+<Split size="900px","600px">
+    <div baseColor="#faf5f5"></div>
+    <div baseColor="#e6e6fa"></div>
+</Split>
+```
 # Parameter
 
 |Simple<br>Param | Parameter Name | Type | Description |
