@@ -1,7 +1,7 @@
 {
   "name": "mofron-comp-split",
   "version": "0.0.1",
-  "description": "[mofron](https://mofron.github.io/mofron/) is module based frontend framework.",
+  "description": "split component for mofron",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,11 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mofron/mofron-comp-split.git"
+  },
+  "dependencies": {
+    "mofron-effect-border" : "",
+    "mofron-layout-grid" : "",
+    "mofron-event-drag" : ""
   },
   "keywords": [
     "front-end"
