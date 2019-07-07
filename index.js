@@ -80,8 +80,8 @@ mf.comp.Split = class extends mf.Component {
             
             /* sync size */
             let wrap = this.adom().child()[0];
-            this.target().styleListener("height", (p1) => { wrap.style(p1); });
-            this.target().styleListener("width", (p1) => { wrap.style(p1); });
+            this.target().styleListener("height", (p1,p2) => { wrap.style(p2); });
+            this.target().styleListener("width", (p1,p2) => { wrap.style(p2); });
             
             /* default config */
             this.layout(new Grid({ tag: "Split" }));
