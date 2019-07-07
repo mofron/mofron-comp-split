@@ -13,7 +13,8 @@
   "dependencies": {
     "mofron-effect-border" : "",
     "mofron-layout-grid" : "",
-    "mofron-event-drag" : ""
+    "mofron-event-drag" : "",
+    "mofron-event-style" : ""
   },
   "keywords": [
     "front-end"
