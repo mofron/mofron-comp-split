@@ -30,7 +30,7 @@ npm install mofron  mofron-comp-split
 |Simple<br>Param | Parameter Name | Type | Description |
 |:--------------:|:---------------|:-----|:------------|
 | | border | component | border component |
-| | ratio | number | left side split ratio |
+| ◯  | ratio | number | left side split ratio |
 | | | number | right side split ratio |
 | | draggable | boolean | true: user is allowed change split ratio by dragging the border. |
 | | | | false: user can not change split ratio. |

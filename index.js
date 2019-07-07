@@ -6,10 +6,11 @@
  * @attention supported size is 'px' or 'rem'
  * @author simpart
  */
-const mf     = require("mofron");
-const Border = require("mofron-effect-border");
-const Grid   = require("mofron-layout-grid");
-const Drag   = require("mofron-event-drag");
+const mf      = require("mofron");
+const Border  = require("mofron-effect-border");
+const Grid    = require("mofron-layout-grid");
+const Drag    = require("mofron-event-drag");
+const evStyle = require("mofron-event-style");
 
 let drag_evt = (p1,p2) => {
     try {
@@ -34,6 +35,7 @@ mf.comp.Split = class extends mf.Component {
      * initialize component
      * 
      * @param (object) object: component option
+     * @pmap raito
      * @type private
      */
     constructor (po) {
@@ -61,6 +63,7 @@ mf.comp.Split = class extends mf.Component {
                 "position":"relative" 
             });
             
+            /* border component */
             this.border(
                 new mf.Component({
                     child: new mf.Component({
@@ -70,7 +73,6 @@ mf.comp.Split = class extends mf.Component {
                     size: ["40px", "100%"], event: new Drag(drag_evt) 
                 })
             );
-            
             let tgt = new mf.Component({ style: { "position" : "absolute" } });
             this.child([this.border(), tgt]);
             this.target(tgt.target());
@@ -81,8 +83,31 @@ mf.comp.Split = class extends mf.Component {
             this.target().styleListener("height", (p1) => { wrap.style(p1); });
             this.target().styleListener("width", (p1) => { wrap.style(p1); });
             
+            /* default config */
             this.layout(new Grid({ tag: "Split" }));
             this.ratio(20,80);
+            this.draggable(true);
+            
+            /* border config */
+            this.event(
+                new evStyle(
+                    (p1,p2) => {
+                        try {
+                            let bdr_wid = mf.func.getSize(p1.border().width());
+                            let wid     = mf.func.getSize(p2.width);
+                            p1.border().style({
+                                "position" : "relative",
+                                "left": (((p1.ratio()[0]/100)*wid.value()) - bdr_wid.value()/2) + "px",
+                                "z-index": "100"
+                            })
+                        } catch (e) {
+                            console.error(e.stack);
+                            throw e;
+                        }
+                    },
+                    "width"
+                )
+            );
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -98,13 +123,13 @@ mf.comp.Split = class extends mf.Component {
         try {
             super.beforeRender();
             if (1 < this.child().length) {
-                let wid     = mf.func.getSize(this.width());
-                let bdr_wid = mf.func.getSize(this.border().width());
-                this.border().style({
-                    "position" : "relative",
-                    "left": (((this.ratio()[0]/100)*wid.value()) - bdr_wid.value()/2) + "px",
-                    "z-index": "100"
-                })
+                let chd = this.child();
+                for (let cidx in chd) {
+                    chd[cidx].style(
+                        { "height": "100%" },
+                        { loose: true }
+                    );
+                }
             }
         } catch (e) {
             console.error(e.stack);
@@ -120,13 +145,7 @@ mf.comp.Split = class extends mf.Component {
      * @type parameter
      */
     border (prm) {
-        try {
-            let ret = this.innerComp("border", prm, mf.Component);
-            if (undefined !== prm) {
-                prm.style({ "cursor":"col-resize" });
-            }
-            return ret;
-        } catch (e) {
+        try { return this.innerComp("border", prm, mf.Component); } catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -165,7 +184,15 @@ mf.comp.Split = class extends mf.Component {
      * @type parameter
      */
     draggable (prm) {
-        try { return this.member("draggable", "boolean", prm, true); } catch (e) {
+        try {
+            let ret = this.member("draggable", "boolean", prm, true);
+            if (undefined !== prm) {
+                this.border().style({
+                    "cursor": (true === prm) ? "col-resize" : "auto"
+                });
+            }
+            return ret;
+        } catch (e) {
             console.error(e.stack);
             throw e;
         }
