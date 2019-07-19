@@ -4,6 +4,7 @@
 split component for mofron
 
 ## Feature
+ - default ratio is 20:80
  - vertical split the screen into two
  - the user can change the division ratio by dragging
 ## Attention
@@ -30,8 +31,8 @@ npm install mofron  mofron-comp-split
 |Simple<br>Param | Parameter Name | Type | Description |
 |:--------------:|:---------------|:-----|:------------|
 | | border | component | border component |
-| ◯  | ratio | number | left side split ratio |
-| | | number | right side split ratio |
+| ◯  | ratio | number | left side split ratio [default is 20] |
+| | | number | right side split ratio [default is 80] |
 | | draggable | boolean | true: user is allowed change split ratio by dragging the border. |
 | | | | false: user can not change split ratio. |
 

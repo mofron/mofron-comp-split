@@ -1,7 +1,8 @@
 /**
  * @file  mofron-comp-split/index.js
  * @brief split component for mofron
- * @feature vertical split the screen into two
+ * @feature default ratio is 20:80
+ *          vertical split the screen into two
  *          the user can change the division ratio by dragging
  * @attention supported size is 'px' or 'rem'
  * @author simpart
@@ -35,7 +36,7 @@ mf.comp.Split = class extends mf.Component {
      * initialize component
      * 
      * @param (object) object: component option
-     * @pmap raito
+     * @pmap ratio
      * @type private
      */
     constructor (po) {
@@ -154,8 +155,8 @@ mf.comp.Split = class extends mf.Component {
     /**
      * split ratio
      *
-     * @param (number) left side split ratio
-     * @param (number) right side split ratio
+     * @param (number) left side split ratio [default is 20]
+     * @param (number) right side split ratio [default is 80]
      * @return (array) split ratio [left, right]
      * @type parameter
      */
