@@ -21,7 +21,7 @@ npm install mofron  mofron-comp-split
     <tag module="mofron-comp-split">Split</tag>
 </require>
 
-<Split size="900px","600px">
+<Split ratio=(30,70) height=6rem>
     <div baseColor="#faf5f5"></div>
     <div baseColor="#e6e6fa"></div>
 </Split>

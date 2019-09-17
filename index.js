@@ -12,6 +12,7 @@ const Border  = require("mofron-effect-border");
 const Grid    = require("mofron-layout-grid");
 const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
+const SynwWid = require("mofron-effect-synwwid");
 
 let drag_evt = (p1,p2) => {
     try {
@@ -19,9 +20,7 @@ let drag_evt = (p1,p2) => {
             return;
         }
         let bdr  = p1.parent().border();
-        bdr_wid  = mf.func.getSize(bdr.width());
-        bdr.style({ "left": (p2.pageX - bdr_wid.value()/2) + "px" });
-        
+        bdr.style({ "left": p2.pageX + "px" });
         let grid = p1.parent().layout(["Grid","Split"]);
         let wid  = mf.func.getSize(p1.parent().width());
         grid.setDirctSize([p2.pageX+"px", wid.value()-p2.pageX + "px"]);
@@ -67,6 +66,7 @@ mf.comp.Split = class extends mf.Component {
             /* border component */
             this.border(
                 new mf.Component({
+		    style: { "transform": "translateX(-50%)" },
                     child: new mf.Component({
                                size: ["20px", "100%"],
                                effect: new Border({ type: "right", color: [190,190,190] })
@@ -98,7 +98,7 @@ mf.comp.Split = class extends mf.Component {
                             let wid     = mf.func.getSize(p2.width);
                             p1.border().style({
                                 "position" : "relative",
-                                "left": (((p1.ratio()[0]/100)*wid.value()) - bdr_wid.value()/2) + "px",
+                                "left": ((p1.ratio()[0]/100) * wid.value()) + "px",
                                 "z-index": "100"
                             })
                         } catch (e) {
@@ -126,12 +126,17 @@ mf.comp.Split = class extends mf.Component {
             if (1 < this.child().length) {
                 let chd = this.child();
                 for (let cidx in chd) {
-                    chd[cidx].style(
-                        { "height": "100%" },
-                        { loose: true }
-                    );
+                    chd[cidx].style({ "height": "100%" }, { loose: true });
                 }
             }
+	    if (null === this.width()) {
+                this.effect(new SynwWid());
+	    }
+	    if (null === this.height()) {
+                this.height(
+                    ("root" === this.parent().objkey()) ? window.innerHeight+"px" : "100%"
+		);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -175,7 +180,7 @@ mf.comp.Split = class extends mf.Component {
             throw e;
         }
     }
-    
+
     /**
      * draggable flag of split border
      *

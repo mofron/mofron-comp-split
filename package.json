@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-split",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "split component for mofron",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "mofron-effect-border" : "",
     "mofron-layout-grid" : "",
     "mofron-event-drag" : "",
-    "mofron-event-style" : ""
+    "mofron-event-style" : "",
+    "mofron-effect-synwwid" : ""
   },
   "keywords": [
     "front-end"
