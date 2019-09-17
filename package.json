@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-split",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "split component for mofron",
   "main": "index.js",
   "scripts": {

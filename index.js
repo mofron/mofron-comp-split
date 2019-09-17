@@ -94,11 +94,9 @@ mf.comp.Split = class extends mf.Component {
                 new evStyle(
                     (p1,p2) => {
                         try {
-                            let bdr_wid = mf.func.getSize(p1.border().width());
-                            let wid     = mf.func.getSize(p2.width);
                             p1.border().style({
                                 "position" : "relative",
-                                "left": ((p1.ratio()[0]/100) * wid.value()) + "px",
+                                "left":  p1.child()[0].width(),
                                 "z-index": "100"
                             })
                         } catch (e) {
