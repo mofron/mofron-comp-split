@@ -14,6 +14,7 @@ const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
 const SynwWid = require("mofron-effect-synwwid");
 
+
 let drag_evt = (p1,p2) => {
     try {
         if (false === p1.parent().draggable()) {
@@ -94,9 +95,11 @@ mf.comp.Split = class extends mf.Component {
                 new evStyle(
                     (p1,p2) => {
                         try {
+                            let bdr_wid = mf.func.getSize(p1.border().width());
+                            let wid     = mf.func.getSize(p2.width);
                             p1.border().style({
                                 "position" : "relative",
-                                "left":  p1.child()[0].width(),
+                                "left": p1.child()[0].width(),
                                 "z-index": "100"
                             })
                         } catch (e) {
@@ -124,16 +127,14 @@ mf.comp.Split = class extends mf.Component {
             if (1 < this.child().length) {
                 let chd = this.child();
                 for (let cidx in chd) {
-                    chd[cidx].style({ "height": "100%" }, { loose: true });
+                    chd[cidx].style(
+                        { "height": "100%" },
+                        { loose: true }
+                    );
                 }
             }
 	    if (null === this.width()) {
                 this.effect(new SynwWid());
-	    }
-	    if (null === this.height()) {
-                this.height(
-                    ("root" === this.parent().objkey()) ? window.innerHeight+"px" : "100%"
-		);
 	    }
         } catch (e) {
             console.error(e.stack);
