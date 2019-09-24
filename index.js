@@ -13,7 +13,7 @@ const Grid    = require("mofron-layout-grid");
 const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
 const SynwWid = require("mofron-effect-synwwid");
-
+const SynwHei = require("mofron-effect-synwhei");
 
 let drag_evt = (p1,p2) => {
     try {
@@ -133,8 +133,11 @@ mf.comp.Split = class extends mf.Component {
                     );
                 }
             }
-	    if (null === this.width()) {
+	    if ( (null === this.width()) && (null === this.effect("Synwwid")) ) {
                 this.effect(new SynwWid());
+	    }
+	    if ( (null === this.height()) && (null === this.effect("Synwhei")) ) {
+                this.effect(new SynwHei());
 	    }
         } catch (e) {
             console.error(e.stack);

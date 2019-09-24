@@ -2,7 +2,7 @@
     <tag module="mofron-comp-split">Split</tag>
 </require>
 
-<Split ratio=(30,70) height=6rem>
+<Split ratio=(30,70)>
     <div baseColor="#faf5f5"></div>
     <div baseColor="#e6e6fa"></div>
 </Split>
