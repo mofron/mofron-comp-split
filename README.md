@@ -35,4 +35,6 @@ npm install mofron  mofron-comp-split
 | | | number | right side split ratio [default is 80] |
 | | draggable | boolean | true: user is allowed change split ratio by dragging the border. |
 | | | | false: user can not change split ratio. |
+| | width | string (size) | split width |
+| | height | string (size) | split height |
 

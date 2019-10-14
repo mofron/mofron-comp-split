@@ -12,8 +12,7 @@ const Border  = require("mofron-effect-border");
 const Grid    = require("mofron-layout-grid");
 const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
-const SynwWid = require("mofron-effect-synwwid");
-const SynwHei = require("mofron-effect-synwhei");
+const SyncWin = require("mofron-effect-syncwin");
 
 let drag_evt = (p1,p2) => {
     try {
@@ -59,57 +58,31 @@ mf.comp.Split = class extends mf.Component {
     initDomConts () {
         try {
             super.initDomConts();
-            this.style({
-                "display":"flex",
-                "position":"relative" 
-            });
+            this.style({ "display": "flex", "position": "relative" });
             
             /* border component */
             this.border(
                 new mf.Component({
 		    style: { "transform": "translateX(-50%)" },
                     child: new mf.Component({
-                               size: ["20px", "100%"],
+                               size: ["25px","100%"],
                                effect: new Border({ type: "right", color: [190,190,190] })
                            }),
-                    size: ["40px", "100%"], event: new Drag(drag_evt) 
+                    size: ["50px","100%"], event: new Drag(drag_evt) 
                 })
             );
-            let tgt = new mf.Component({ style: { "position" : "absolute" } });
+            let tgt = new mf.Component({
+	        style: { "position": "absolute" },
+		size: ["100%","100%"]
+	    });
             this.child([this.border(), tgt]);
             this.target(tgt.target());
             this.styleTgt(this.target());
             
-            /* sync size */
-            let wrap = this.adom().child()[0];
-            this.target().styleListener("height", (p1,p2) => { wrap.style(p2); });
-            this.target().styleListener("width", (p1,p2) => { wrap.style(p2); });
-            
-            /* default config */
-            this.layout(new Grid({ tag: "Split" }));
+	    /* default config */
+	    this.layout(new Grid({ tag: "Split" }));
             this.ratio(20,80);
-            this.draggable(true);
-            
-            /* border config */
-            this.event(
-                new evStyle(
-                    (p1,p2) => {
-                        try {
-                            let bdr_wid = mf.func.getSize(p1.border().width());
-                            let wid     = mf.func.getSize(p2.width);
-                            p1.border().style({
-                                "position" : "relative",
-                                "left": p1.child()[0].width(),
-                                "z-index": "100"
-                            })
-                        } catch (e) {
-                            console.error(e.stack);
-                            throw e;
-                        }
-                    },
-                    "width"
-                )
-            );
+	    this.draggable(true);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -124,21 +97,22 @@ mf.comp.Split = class extends mf.Component {
     beforeRender () {
         try {
             super.beforeRender();
+	    /* set child height */
             if (1 < this.child().length) {
                 let chd = this.child();
                 for (let cidx in chd) {
-                    chd[cidx].style(
-                        { "height": "100%" },
-                        { loose: true }
-                    );
+                    chd[cidx].style({ "height": "100%" }, { loose: true } );
                 }
             }
-	    if ( (null === this.width()) && (null === this.effect("Synwwid")) ) {
-                this.effect(new SynwWid());
-	    }
-	    if ( (null === this.height()) && (null === this.effect("Synwhei")) ) {
-                this.effect(new SynwHei());
-	    }
+	    /* set default config */
+            this.effect(
+	        new SyncWin([
+                    (null === this.width()) ? true : false,
+		    (null === this.height()) ? true : false
+		])
+	    );
+
+	    this.border().style({ "left" : this.ratio()[0] + '%' });
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -153,7 +127,18 @@ mf.comp.Split = class extends mf.Component {
      * @type parameter
      */
     border (prm) {
-        try { return this.innerComp("border", prm, mf.Component); } catch (e) {
+        try {
+	    if (undefined !== prm) {
+	        prm.option({
+		    event: new Drag(drag_evt),
+		    style: {
+                        "position" : "relative",
+		        "z-index": "100"
+                    }
+		});
+	    }
+	    return this.innerComp("border", prm, mf.Component);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -204,6 +189,34 @@ mf.comp.Split = class extends mf.Component {
             console.error(e.stack);
             throw e;
         }
+    }
+
+    /**
+     * split width
+     * 
+     * @param (string (size)) split width
+     * @return (string (size)) split width
+     * @type parameter
+     */
+    width (prm, opt) {
+        return this.adom().style(
+            (undefined === prm) ? "width" : { width : prm },
+	    opt
+	);
+    }
+    
+    /**
+     * split height
+     * 
+     * @param (string (size)) split height
+     * @return (string (size)) split height
+     * @type parameter
+     */
+    height (prm,opt) {
+        return this.adom().style( 
+            (undefined === prm) ? "height" : { height : prm },
+            opt
+        );
     }
 }
 module.exports = mf.comp.Split;
