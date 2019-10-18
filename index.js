@@ -104,19 +104,31 @@ mf.comp.Split = class extends mf.Component {
                     chd[cidx].style({ "height": "100%" }, { loose: true } );
                 }
             }
-	    /* set default config */
-            this.effect(
-	        new SyncWin([
-                    (null === this.width()) ? true : false,
-		    (null === this.height()) ? true : false
-		])
-	    );
-
 	    this.border().style({ "left" : this.ratio()[0] + '%' });
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
+    }
+    
+    /**
+     * set default size
+     * 
+     * @type private
+     */
+    afterRender () {
+        try {
+            super.afterRender();
+            this.effect(
+                new SyncWin([
+                    (null === this.width()) ? true : false,
+                    (null === this.height()) ? true : false
+                ])
+            );
+	} catch (e) {
+            console.error(e.stack);
+	    throw e;
+	}
     }
     
     /**
