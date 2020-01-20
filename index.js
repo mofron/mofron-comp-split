@@ -1,49 +1,42 @@
 /**
  * @file  mofron-comp-split/index.js
  * @brief split component for mofron
+ *        this component splits screen to two.
+ *        exp. one is for menu or navigate and the other is for main contents.
  * @feature default ratio is 20:80
  *          vertical split the screen into two
  *          the user can change the division ratio by dragging
  * @attention supported size is 'px' or 'rem'
- * @author simpart
+ * @license MIT
  */
-const mf      = require("mofron");
 const Border  = require("mofron-effect-border");
 const Grid    = require("mofron-layout-grid");
 const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
 const SyncWin = require("mofron-effect-syncwin");
+const SyncHei = require("mofron-effect-synchei");
+const comutl  = mofron.util.common;
 
-let drag_evt = (p1,p2) => {
-    try {
-        if (false === p1.parent().draggable()) {
-            return;
-        }
-        let bdr  = p1.parent().border();
-        bdr.style({ "left": p2.pageX + "px" });
-        let grid = p1.parent().layout(["Grid","Split"]);
-        let wid  = mf.func.getSize(p1.parent().width());
-        grid.setDirctSize([p2.pageX+"px", wid.value()-p2.pageX + "px"]);
-    } catch (e) {
-        console.error(e.stack);
-        throw e;
-    }
-};
-
-mf.comp.Split = class extends mf.Component {
+module.exports = class extends mofron.class.Component {
     /**
      * initialize component
      * 
-     * @param (object) object: component option
-     * @pmap ratio
+     * @param (mixed) ratio parameter
+     *                key-value: component option
+     * @short ratio
      * @type private
      */
-    constructor (po) {
+    constructor (p1) {
         try {
             super();
             this.name("Split");
-            this.prmMap("ratio");
-            this.prmOpt(po);
+            this.shortForm("ratio");
+            /* init config */
+            this.confmng().add("draggable", { type: "boolean", init: true });
+	    /* set config */
+	    if (0 < arguments.length) {
+                this.config(p1);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -58,26 +51,23 @@ mf.comp.Split = class extends mf.Component {
     initDomConts () {
         try {
             super.initDomConts();
-            this.style({ "display": "flex", "position": "relative" });
+            this.style({ "display": "flex" });
             
             /* border component */
-            this.border(
-                new mf.Component({
+	    this.border(
+                comutl.getcmp({
 		    style: { "transform": "translateX(-50%)" },
-                    child: new mf.Component({
-                               size: ["25px","100%"],
-                               effect: new Border({ type: "right", color: [190,190,190] })
+                    child: comutl.getcmp({
+                               size: comutl.getarg("25px","100%"),
+                               effect: new Border({ position: "right", color: [190,190,190] })
                            }),
-                    size: ["50px","100%"], event: new Drag(drag_evt) 
+                    size: comutl.getarg("50px","100%")
                 })
             );
-            let tgt = new mf.Component({
-	        style: { "position": "absolute" },
-		size: ["100%","100%"]
-	    });
+            let tgt = comutl.getcmp({ style: { "position": "absolute" } });
             this.child([this.border(), tgt]);
-            this.target(tgt.target());
-            this.styleTgt(this.target());
+            this.childDom(tgt.childDom());
+            this.styleDom(this.styleDom());
             
 	    /* default config */
 	    this.layout(new Grid({ tag: "Split" }));
@@ -97,38 +87,25 @@ mf.comp.Split = class extends mf.Component {
     beforeRender () {
         try {
             super.beforeRender();
-	    /* set child height */
-            if (1 < this.child().length) {
-                let chd = this.child();
-                for (let cidx in chd) {
-                    chd[cidx].style({ "height": "100%" }, { loose: true } );
-                }
-            }
+	    /* set size */
+            this.border().effect(new SyncHei(this.childDom().component()));
+            this.effect(
+	        new SyncWin(
+		    new mofron.class.ConfArg(
+		        new mofron.class.ConfArg(
+                            (null === this.width()) ? true : false,
+		            (null === this.height()) ? true : false
+			),
+			undefined
+		    )
+		)
+	    );
+	    /* set default width from ratio */
 	    this.border().style({ "left" : this.ratio()[0] + '%' });
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
-    }
-    
-    /**
-     * set default size
-     * 
-     * @type private
-     */
-    afterRender () {
-        try {
-            super.afterRender();
-            this.effect(
-                new SyncWin([
-                    (null === this.width()) ? true : false,
-                    (null === this.height()) ? true : false
-                ])
-            );
-	} catch (e) {
-            console.error(e.stack);
-	    throw e;
-	}
     }
     
     /**
@@ -141,15 +118,10 @@ mf.comp.Split = class extends mf.Component {
     border (prm) {
         try {
 	    if (undefined !== prm) {
-	        prm.option({
-		    event: new Drag(drag_evt),
-		    style: {
-                        "position" : "relative",
-		        "z-index": "100"
-                    }
-		});
+	        prm.event(new Drag(this.dragEvent));
+		prm.style({ "position" : "relative", "z-index": "100" });
 	    }
-	    return this.innerComp("border", prm, mf.Component);
+	    return this.innerComp("border", prm, mofron.class.Component);
 	} catch (e) {
             console.error(e.stack);
             throw e;
@@ -166,14 +138,13 @@ mf.comp.Split = class extends mf.Component {
      */
     ratio (p1, p2) {
         try {
-            if (undefined === p1) {
-                return this.m_ratio;
-            }
-            if (100 < (p1+p2)) {
-                throw new Error("invalid parameter: burst ratio");
-            }
-            this.m_ratio = [p1,p2];
-            this.layout(["Grid","Split"]).ratio(this.ratio());
+	    let grid = this.layout({ name: "Grid", tag: "Split" });
+	    if (undefined === p1) {
+	        /* getter */
+                return grid.ratio();
+	    }
+	    /* setter */
+	    grid.ratio([p1,p2]);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -190,7 +161,7 @@ mf.comp.Split = class extends mf.Component {
      */
     draggable (prm) {
         try {
-            let ret = this.member("draggable", "boolean", prm, true);
+            let ret = this.confmng("draggable", prm);
             if (undefined !== prm) {
                 this.border().style({
                     "cursor": (true === prm) ? "col-resize" : "auto"
@@ -204,32 +175,27 @@ mf.comp.Split = class extends mf.Component {
     }
 
     /**
-     * split width
+     * drag event function
      * 
-     * @param (string (size)) split width
-     * @return (string (size)) split width
-     * @type parameter
+     * @param (component) dragged component
+     * @param (object) "mousemove" event object
+     * @type private
      */
-    width (prm, opt) {
-        return this.adom().style(
-            (undefined === prm) ? "width" : { width : prm },
-	    opt
-	);
-    }
-    
-    /**
-     * split height
-     * 
-     * @param (string (size)) split height
-     * @return (string (size)) split height
-     * @type parameter
-     */
-    height (prm,opt) {
-        return this.adom().style( 
-            (undefined === prm) ? "height" : { height : prm },
-            opt
-        );
+    dragEvent (p1,p2) {
+        try {
+            if (false === p1.parent().draggable()) {
+                return;
+            }
+            let bdr  = p1.parent().border();
+            bdr.style({ "left": p2.pageX + "px" });
+            let grid = p1.parent().layout({ name: "Grid", tag: "Split" });
+            let chd  = p1.parent().child();
+            chd[0].width(p2.pageX + "px");
+            chd[1].width(p1.parent().width().value() - p2.pageX + "px");
+	} catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
     }
 }
-module.exports = mf.comp.Split;
 /* end of file */

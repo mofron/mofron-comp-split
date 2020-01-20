@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-split",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "split component for mofron",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,11 @@
     "mofron-layout-grid" : "",
     "mofron-event-drag" : "",
     "mofron-event-style" : "",
-    "mofron-effect-syncwin" : ""
+    "mofron-effect-syncwin" : "",
+    "mofron-effect-synchei" : ""
   },
   "keywords": [
-    "front-end"
+    "front-end","mofron"
   ],
   "author": "simparts",
   "license": "MIT",
