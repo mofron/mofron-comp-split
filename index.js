@@ -1,5 +1,5 @@
 /**
- * @file  mofron-comp-split/index.js
+ * @file mofron-comp-split/index.js
  * @brief split component for mofron
  *        this component splits screen to two.
  *        exp. one is for menu or navigate and the other is for main contents.

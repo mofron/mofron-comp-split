@@ -3,6 +3,6 @@
 </require>
 
 <Split ratio=(30,70)>
-    <div baseColor="#faf5f5"></div>
-    <div baseColor="#e6e6fa"></div>
+    <div color2="#faf5f5"></div>
+    <div color2="#e6e6fa"></div>
 </Split>

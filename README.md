@@ -3,6 +3,10 @@
 
 split component for mofron
 
+this component splits screen to two.
+
+exp. one is for menu or navigate and the other is for main contents.
+
 ## Feature
  - default ratio is 20:80
  - vertical split the screen into two
@@ -12,7 +16,7 @@ split component for mofron
 
 # Install
 ```
-npm install mofron  mofron-comp-split
+npm install mofron mofron-comp-split
 ```
 
 # Sample
@@ -22,19 +26,18 @@ npm install mofron  mofron-comp-split
 </require>
 
 <Split ratio=(30,70)>
-    <div baseColor="#faf5f5"></div>
-    <div baseColor="#e6e6fa"></div>
+    <div color2="#faf5f5"></div>
+    <div color2="#e6e6fa"></div>
 </Split>
 ```
+
 # Parameter
 
-|Simple<br>Param | Parameter Name | Type | Description |
-|:--------------:|:---------------|:-----|:------------|
+| Short<br>Form | Parameter Name | Type | Description |
+|:-------------:|:---------------|:-----|:------------|
 | | border | component | border component |
 | ◯  | ratio | number | left side split ratio [default is 20] |
 | | | number | right side split ratio [default is 80] |
 | | draggable | boolean | true: user is allowed change split ratio by dragging the border. |
 | | | | false: user can not change split ratio. |
-| | width | string (size) | split width |
-| | height | string (size) | split height |
 
