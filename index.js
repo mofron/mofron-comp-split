@@ -1,5 +1,5 @@
 /**
- * @file mofron-comp-split/index.js
+ * @file  mofron-comp-split/index.js
  * @brief split component for mofron
  *        this component splits screen to two.
  *        exp. one is for menu or navigate and the other is for main contents.
@@ -15,7 +15,6 @@ const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
 const SyncWin = require("mofron-effect-syncwin");
 const SyncHei = require("mofron-effect-synchei");
-const comutl  = mofron.util.common;
 
 module.exports = class extends mofron.class.Component {
     /**
@@ -55,16 +54,16 @@ module.exports = class extends mofron.class.Component {
             
             /* border component */
 	    this.border(
-                comutl.getcmp({
+                new mofron.class.Component({
 		    style: { "transform": "translateX(-50%)" },
-                    child: comutl.getcmp({
-                               size: comutl.getarg("25px","100%"),
+                    child: new mofron.class.Component({
+                               size: new mofron.class.ConfArg("25px","100%"),
                                effect: new Border({ position: "right", color: [190,190,190] })
                            }),
-                    size: comutl.getarg("50px","100%")
+                    size: new mofron.class.ConfArg("50px","100%")
                 })
             );
-            let tgt = comutl.getcmp({ style: { "position": "absolute" } });
+            let tgt = new mofron.class.Component({ style: { "position": "absolute" } });
             this.child([this.border(), tgt]);
             this.childDom(tgt.childDom());
             this.styleDom(this.styleDom());
