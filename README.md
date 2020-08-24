@@ -16,14 +16,14 @@ exp. one is for menu or navigate and the other is for main contents.
 
 # Install
 ```
-npm install mofron mofron-comp-split
+npm install mofron  mofron-comp-split
 ```
 
 # Sample
 ```html
-<require>
+<setting>
     <tag module="mofron-comp-split">Split</tag>
-</require>
+</setting>
 
 <Split ratio=(30,70)>
     <div color2="#faf5f5"></div>

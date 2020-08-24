@@ -28,7 +28,7 @@ module.exports = class extends mofron.class.Component {
     constructor (p1) {
         try {
             super();
-            this.name("Split");
+            this.modname("Split");
             this.shortForm("ratio");
             /* init config */
             this.confmng().add("draggable", { type: "boolean", init: true });
