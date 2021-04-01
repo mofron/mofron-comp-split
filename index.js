@@ -15,6 +15,7 @@ const Drag    = require("mofron-event-drag");
 const evStyle = require("mofron-event-style");
 const SyncWin = require("mofron-effect-syncwin");
 const SyncHei = require("mofron-effect-synchei");
+const Component = mofron.class.Component;
 
 module.exports = class extends mofron.class.Component {
     /**
@@ -68,10 +69,56 @@ module.exports = class extends mofron.class.Component {
             this.childDom(tgt.childDom());
             this.styleDom(this.styleDom());
             
+	    let left = new Component({ style: { "overflow" : "scroll" }, child: new Component() });
+	    let right = new Component({ style: { "overflow" : "scroll" }, child: new Component() });
+	    this.child([left,right]);
+            
 	    /* default config */
 	    this.layout(new Grid({ tag: "Split" }));
             this.ratio(20,80);
 	    this.draggable(true);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * left contents setter/getter
+     * 
+     * @param (mixed) component: contents
+     *                array: component lists
+     * @param (dist) left config
+     * @type parameter
+     */
+    left (cmp,cnf) {
+        try {
+	    let left = this.child()[0].child()[0];
+	    if (undefined !== cnf) {
+                left.config(cnf);
+	    }
+	    return left.child(cmp);
+	} catch (e) {
+            console.error(e.stack);
+            throw e;
+	}
+    }
+    
+    /**
+     * right contents setter/getter
+     * 
+     * @param (mixed) component: contents
+     *                array: component lists
+     * @param (dist) right config
+     * @type parameter
+     */
+    right (cmp,cnf) {
+        try {
+            let right = this.child()[1].child()[0];
+            if (undefined !== cnf) {
+                right.config(cnf);
+            }
+            return right.child(cmp);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -91,12 +138,9 @@ module.exports = class extends mofron.class.Component {
             this.effect(
 	        new SyncWin(
 		    new mofron.class.ConfArg(
-		        new mofron.class.ConfArg(
-                            (null === this.width()) ? true : false,
-		            (null === this.height()) ? true : false
-			),
-			undefined
-		    )
+                        (null === this.width()) ? true : false,
+		        (null === this.height()) ? true : false
+                    )
 		)
 	    );
 	    /* set default width from ratio */
@@ -137,7 +181,7 @@ module.exports = class extends mofron.class.Component {
      */
     ratio (p1, p2) {
         try {
-	    let grid = this.layout({ name: "Grid", tag: "Split" });
+	    let grid = this.layout({ modname: "Grid", tag: "Split" });
 	    if (undefined === p1) {
 	        /* getter */
                 return grid.ratio();
@@ -187,10 +231,9 @@ module.exports = class extends mofron.class.Component {
             }
             let bdr  = p1.parent().border();
             bdr.style({ "left": p2.pageX + "px" });
-            let grid = p1.parent().layout({ name: "Grid", tag: "Split" });
             let chd  = p1.parent().child();
             chd[0].width(p2.pageX + "px");
-            chd[1].width(p1.parent().width().value() - p2.pageX + "px");
+            chd[1].width(p1.parent().width() - p2.pageX + "px");
 	} catch (e) {
             console.error(e.stack);
             throw e;

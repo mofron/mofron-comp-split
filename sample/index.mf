@@ -1,5 +1,5 @@
 <setting>
-    <tag module="mofron-comp-split">Split</tag>
+    <tag load="mofron-comp-split">Split</tag>
 </setting>
 
 <Split ratio=(30,70)>

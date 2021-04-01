@@ -22,7 +22,7 @@ npm install mofron  mofron-comp-split
 # Sample
 ```html
 <setting>
-    <tag module="mofron-comp-split">Split</tag>
+    <tag load="mofron-comp-split">Split</tag>
 </setting>
 
 <Split ratio=(30,70)>
@@ -35,6 +35,12 @@ npm install mofron  mofron-comp-split
 
 | Short<br>Form | Parameter Name | Type | Description |
 |:-------------:|:---------------|:-----|:------------|
+| | left | mixed | component: contents |
+| | | | array: component lists |
+| | | dist | left config |
+| | right | mixed | component: contents |
+| | | | array: component lists |
+| | | dist | right config |
 | | border | component | border component |
 | ◯  | ratio | number | left side split ratio [default is 20] |
 | | | number | right side split ratio [default is 80] |
