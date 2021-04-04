@@ -16,6 +16,7 @@ const evStyle = require("mofron-event-style");
 const SyncWin = require("mofron-effect-syncwin");
 const SyncHei = require("mofron-effect-synchei");
 const Component = mofron.class.Component;
+const comutl  = mofron.util.common;
 
 module.exports = class extends mofron.class.Component {
     /**
@@ -233,7 +234,9 @@ module.exports = class extends mofron.class.Component {
             bdr.style({ "left": p2.pageX + "px" });
             let chd  = p1.parent().child();
             chd[0].width(p2.pageX + "px");
-            chd[1].width(p1.parent().width() - p2.pageX + "px");
+            chd[1].width(
+	        comutl.sizediff(p1.parent().width(), p2.pageX + "px")
+            );
 	} catch (e) {
             console.error(e.stack);
             throw e;
