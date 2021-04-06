@@ -70,8 +70,12 @@ module.exports = class extends mofron.class.Component {
             this.childDom(tgt.childDom());
             this.styleDom(this.styleDom());
             
-	    let left = new Component({ style: { "overflow" : "scroll" }, child: new Component() });
-	    let right = new Component({ style: { "overflow" : "scroll" }, child: new Component() });
+	    let left = new Component({
+	        style: { "overflow" : "scroll" }, child: new Component(), height: "100%"
+            });
+	    let right = new Component({
+	        style: { "overflow" : "scroll" }, child: new Component(), height: "100%"
+            });
 	    this.child([left,right]);
             
 	    /* default config */
