@@ -34,6 +34,7 @@ module.exports = class extends mofron.class.Component {
             this.shortForm("ratio");
             /* init config */
             this.confmng().add("draggable", { type: "boolean", init: true });
+	    this.confmng().add("dragEvent", { type: "event", list: true });
 	    /* set config */
 	    if (0 < arguments.length) {
                 this.config(p1);
@@ -166,7 +167,36 @@ module.exports = class extends mofron.class.Component {
     border (prm) {
         try {
 	    if (undefined !== prm) {
-	        prm.event(new Drag(this.dragEvent));
+	        let split = this;
+                let bdr_move = (p1,p2) => {
+                    try {
+                        if (false === p1.parent().draggable()) {
+                            return;
+                        }
+                        let bdr  = p1.parent().border();
+                        bdr.style({ "left": p2.pageX + "px" });
+                        let chd  = p1.parent().child();
+                        chd[0].width(p2.pageX + "px");
+                        chd[1].width(
+                            comutl.sizediff(p1.parent().width(), p2.pageX + "px")
+                        );
+                        
+                        p2.pageX/parseInt(p1.parent().width())
+
+			let evt = this.dragEvent();
+			for (let eidx in evt) {
+                            evt[eidx][0](
+			        split,
+				[p2.pageX + 'px', chd[1].width()],
+				evt[eidx][1]
+	                    );
+			}
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                }
+	        prm.event(new Drag(bdr_move));
 		prm.style({ "position" : "relative", "z-index": "100" });
 	    }
 	    return this.innerComp("border", prm, mofron.class.Component);
@@ -222,25 +252,12 @@ module.exports = class extends mofron.class.Component {
         }
     }
 
-    /**
-     * drag event function
-     * 
-     * @param (component) dragged component
-     * @param (object) "mousemove" event object
-     * @type private
-     */
-    dragEvent (p1,p2) {
+    dragEvent (fnc,prm) {
         try {
-            if (false === p1.parent().draggable()) {
-                return;
+            if (undefined === fnc) {
+                return this.confmng('dragEvent');
             }
-            let bdr  = p1.parent().border();
-            bdr.style({ "left": p2.pageX + "px" });
-            let chd  = p1.parent().child();
-            chd[0].width(p2.pageX + "px");
-            chd[1].width(
-	        comutl.sizediff(p1.parent().width(), p2.pageX + "px")
-            );
+            this.confmng('dragEvent',[fnc,prm]);
 	} catch (e) {
             console.error(e.stack);
             throw e;
